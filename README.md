@@ -18,7 +18,13 @@ to run these examples from the command line.
 - scripts/run_multiclass.sh
 - scripts/run_reranking.sh
 
-The sample data sets can be found at 'data' directory. 
+All the scripts follow the same argument structure,
+
+```
+<script-name> <(train/test)-model> <train-data>  <learning-config> <model-name>
+```
+
+The sample training data sets can be found under 'data' directory. 
 We describe the usage of each script below. 
 
 POS Tagging
@@ -48,8 +54,7 @@ Use the following command to train a sequential model 'seqModel' on
 ./scripts/run_sequence.sh trainSequenceModel data/sequence/wsj.sub.train config/DEMIParallelDCD.config seqModel
 ```
 
-Again, one can use another structured learning approach to train the model 
-by specifying a different config file. Each line follows the following format 
+Each line follows the following format 
 
 ```
 [Tag] qid:[example_id] [feature1_index]:[feature1_value] [feature2_index]:[feature2_value] ...
@@ -63,6 +68,22 @@ The following comment tests 'seqModel" on 'data/sequence/wsj.sub.test' data set.
 ```
 
 Multi-class Cost-Sensitive Classification
+=========================================
+
+Each line of the training data represents one instance, and it follows the following format:
+
+```
+[Tag] [feature1_index]:[feature1_value] [feature2_index]:[feature2_value] ...
+```
+where `[Tag]` is an integer representing label.
+
+The cost matrix file specifies the loss of wrong predictions.
+Each line follows the following format:
+
+```
+[gold_label] [predicted_label] [cost]
+```
+The cost needs to be positive, and should be 0 when `[gold_label]=[predicted_label]`.
 
 Use the following command to train a multiclass model 'multiModel' on 
 'data/multiclass/heart_scale.train' data with a cost matrix specified in 
@@ -71,30 +92,15 @@ Use the following command to train a multiclass model 'multiModel' on
 ```
 ./scripts/run_multiclass.sh trainMultiClassModel data/multiclass/heart_scale.train data/multiclass/heart_scale.cost config/DEMIParallelDCD.config multiModel
 ```
-Each line of the input data represents one instance, and it follows the following format:
-
-```
-[Tag] [feature1_index]:[feature1_value] [feature2_index]:[feature2_value] ...
-```
-where `[Tag]` is an integer representing label.
-
-The cost matrix file specifies the loss of  wrong predictions.
-Each line follows the following format:
-
-```
-[gold_label] [predicted_label] [cost]
-```
-The cost needs to be positive, and it is 0 when `[gold_label]=[predicted_label]`.
 
 To test the performance of 'multiModel' on 'data/multiclass/heart_scale.test', use
 
 ```
-> ./scripts/run_multiclass.sh testMultiClassModel multiModel data/multiclass/heart_scale.test
+./scripts/run_multiclass.sh testMultiClassModel multiModel data/multiclass/heart_scale.test
 ```
 
 Re-ranking
 ==========
-
 
 Use the following command to train a re-ranker on 'data/reranking/rank.train' with  Strctured Perceptron
 
