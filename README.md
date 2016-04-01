@@ -8,9 +8,10 @@ mvn compile
 sh scripts/testAllSolvers.sh 
 ```
 
-We illustrate illinois-sl's interface for 3 popular learning
-applications -- cost-sensitive multi-class classification, reranking,
-and sequential tagging.
+We illustrate how to use illinois-sl's interface for 3 popular
+learning applications -- cost-sensitive multi-class classification,
+reranking, and sequential tagging. The following scripts are provided
+to run these examples from the command line.
 
 - scripts/run_tutorial.sh
 - scripts/run_sequence.sh
@@ -20,31 +21,25 @@ and sequential tagging.
 The sample data sets can be found at 'data' directory. 
 We describe the usage of each script below. 
 
-scripts/run_tutorial.sh
-____
+POS Tagging
+===========
 
-Use the following comment to train a part of speech tagger model 'posModel' on 
-'data/tutorial/big.train' with DEMIParallelDCD solver:
+To train a part of speech tagger model named `posModel` on
+'data/tutorial/big.train' with DEMIParallelDCD solver, run:
 
 ```
 > ./scripts/run_tutorial.sh trainPOSModel data/tutorial/big.train  config/DEMIParallelDCD.config posModel
 ```
 
-One can use other structured learning solvers by simply specifying corresponding config file in 'config/'
-
-Currently, we provide the following options:
-- DCD.config : a dual coordinate descent approach (single thread) for Structured SVM.
-- DEMIParallelDCD.config: DEMIDCD for Structured SVM. (see the ECML paper below)
-- ParallelDCD.config: a master-slave dual coordinate descent method for Structured SVM.
-- StrcturedPerceptron.config: a Structured Perceptron implementation.
-
-The following script evaluates the performance of 'posModel' on 
-'data/tutorial/big.test':
+The following script evaluates the performance of `posModel` on 
+`data/tutorial/big.test`:
 
 ```
 >./scripts/run_tutorial.sh testPOSModel posModel data/tutorial/big.test
 ```
 
+Sequence Tagging
+================
 scripts/run_sequence.sh
 ____
 
@@ -119,3 +114,15 @@ the permissions on the scripts to allow you to execute them:
 ```
 > chmod 744 scripts/*sh
 ```
+
+
+Config
+======
+One can use other structured learning solvers by simply specifying corresponding config file in 'config/'
+
+Currently, we provide the following options:
+- `DCD.config`: a dual coordinate descent approach (single thread) for Structured SVM.
+- `DEMIParallelDCD.config`: DEMIDCD for Structured SVM. (see the ECML paper below)
+- `ParallelDCD.config`: a master-slave dual coordinate descent method for Structured SVM.
+- `StrcturedPerceptron.config`: a Structured Perceptron implementation.
+
