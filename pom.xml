@@ -105,21 +105,8 @@
     
     <dependency>
       <groupId>edu.illinois.cs.cogcomp</groupId>
-      <artifactId>illinois-core-utilities</artifactId>
-      <version>3.0.22</version>
-    </dependency>
-
-    <dependency>
-      <groupId>com.google.guava</groupId>
-      <artifactId>guava</artifactId>
-      <version>19.0</version>
-    </dependency>
-    
-    <dependency>
-      <groupId>org.slf4j</groupId>
-      <artifactId>slf4j-simple</artifactId>
-      <version>1.6.1</version>
-      <optional>true</optional>
+      <artifactId>illinois-sl-core</artifactId>
+      <version>1.0.0</version>
     </dependency>
 
   </dependencies>
