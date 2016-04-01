@@ -1,0 +1,8 @@
+# format: gold_label predicted_label cost
+# Assume the gold lab is i and prediction is j.
+# The cost specifies the loss when predicting the label of an instance to be j, while the gold label is i.
+# 1) when gold and prediction are the same: the cost needs to be zero
+# 2) A cost value needs to be positive
+-1 +1 1
+# hope to bias toward to positive label
++1 -1 3
