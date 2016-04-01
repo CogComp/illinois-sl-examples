@@ -28,28 +28,26 @@ To train a part of speech tagger model named `posModel` on
 'data/tutorial/big.train' with DEMIParallelDCD solver, run:
 
 ```
-> ./scripts/run_tutorial.sh trainPOSModel data/tutorial/big.train  config/DEMIParallelDCD.config posModel
+./scripts/run_tutorial.sh trainPOSModel data/tutorial/big.train  config/DEMIParallelDCD.config posModel
 ```
 
 The following script evaluates the performance of `posModel` on 
 `data/tutorial/big.test`:
 
 ```
->./scripts/run_tutorial.sh testPOSModel posModel data/tutorial/big.test
+./scripts/run_tutorial.sh testPOSModel posModel data/tutorial/big.test
 ```
 
 Sequence Tagging
 ================
-scripts/run_sequence.sh
-____
 
-
-Use the following comment to train a sequential model 'seqModel' on 
+Use the following command to train a sequential model 'seqModel' on 
 'data/tutorial/wsj.sub.train' with DEMIParallelDCD solver:
 
 ```
-> ./scripts/run_sequence.sh trainSequenceModel data/sequence/wsj.sub.train config/DEMIParallelDCD.config seqModel
+./scripts/run_sequence.sh trainSequenceModel data/sequence/wsj.sub.train config/DEMIParallelDCD.config seqModel
 ```
+
 Again, one can use another structured learning approach to train the model 
 by specifying a different config file. Each line follows the following format 
 
@@ -61,17 +59,17 @@ by specifying a different config file. Each line follows the following format
 
 The following comment tests 'seqModel" on 'data/sequence/wsj.sub.test' data set.
 ```
-> ./scripts/run_sequence.sh testSequenceModel seqModel data/sequence/wsj.sub.test
+./scripts/run_sequence.sh testSequenceModel seqModel data/sequence/wsj.sub.test
 ```
 
-4.1.2 __ scripts/run_multiclass.sh __
+Multi-class Cost-Sensitive Classification
 
-Use the following comment to train a multiclass model 'multiModel' on 
+Use the following command to train a multiclass model 'multiModel' on 
 'data/multiclass/heart_scale.train' data with a cost matrix specified in 
 'data/multiclass/heart_scale.cost' using DEMIParallelDCD solver:
 
 ```
-> ./scripts/run_multiclass.sh trainMultiClassModel data/multiclass/heart_scale.train data/multiclass/heart_scale.cost config/DEMIParallelDCD.config multiModel
+./scripts/run_multiclass.sh trainMultiClassModel data/multiclass/heart_scale.train data/multiclass/heart_scale.cost config/DEMIParallelDCD.config multiModel
 ```
 Each line of the input data represents one instance, and it follows the following format:
 
@@ -94,14 +92,14 @@ To test the performance of 'multiModel' on 'data/multiclass/heart_scale.test', u
 > ./scripts/run_multiclass.sh testMultiClassModel multiModel data/multiclass/heart_scale.test
 ```
 
-scripts/run_reranking.sh
-____
+Re-ranking
+==========
 
 
-Use the following comment to train a re-ranker on 'data/reranking/rank.train' with  Strctured Perceptron
+Use the following command to train a re-ranker on 'data/reranking/rank.train' with  Strctured Perceptron
 
 ```
-> ./scripts/run_reranking.sh trainRankingModel data/reranking/rerank.train config/StructuredPerceptron.config  rankModel
+./scripts/run_reranking.sh trainRankingModel data/reranking/rerank.train config/StructuredPerceptron.config  rankModel
 ```
 Use the following comment to test the re-ranker model on 'data/reranking/rerank.test'
 ```
