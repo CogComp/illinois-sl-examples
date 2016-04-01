@@ -1,4 +1,4 @@
-Examples to accompany the illinois-sl package.
+Examples to accompany the [illinois-sl package](https://github.com/IllinoisCogComp/illinois-sl).
 
 To quickly test all solvers, simply run
 
