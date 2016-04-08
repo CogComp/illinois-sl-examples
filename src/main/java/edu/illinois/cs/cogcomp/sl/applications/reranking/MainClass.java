@@ -70,12 +70,17 @@ public class MainClass {
 			}
 
 			double pred_loss = 0.0;
-			for (int i = 0; i < sp.size(); i++) {
-				RankingInstance ri = (RankingInstance) sp.instanceList.get(i);
-				RankingLabel pred = (RankingLabel) infSolver.getBestStructure(model.wv, ri);
-				pred_loss += ri.scoreList.get(pred.pred_item);
-				if(writer!=null)
-					writer.write(pred.pred_item+ "\n");
+			try {
+				for (int i = 0; i < sp.size(); i++) {
+					RankingInstance ri = (RankingInstance) sp.instanceList.get(i);
+					RankingLabel pred = (RankingLabel) infSolver.getBestStructure(model.wv, ri);
+					pred_loss += ri.scoreList.get(pred.pred_item);
+					if(writer!=null)
+						writer.write(pred.pred_item+ "\n");
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.exit(-1);
 			}
 			System.out.println("Loss = " + pred_loss/sp.size());
 

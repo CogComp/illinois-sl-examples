@@ -62,7 +62,10 @@ public class RankingInferenceSolver extends AbstractInferenceSolver{
 		RankingInstance ri = (RankingInstance) ins;
 		int maxIndex = -1;
 		double maxScore = Double.NEGATIVE_INFINITY;
-		
+
+		if (ri.featureList == null || ri.featureList.size() == 0) {
+			throw (new IllegalArgumentException("Empty example found: " + ri.example_id));
+		}
 		for(int i=0; i < ri.featureList.size(); i ++){
 			double score = weight.dotProduct(ri.featureList.get(i));
 			if (score > maxScore){
