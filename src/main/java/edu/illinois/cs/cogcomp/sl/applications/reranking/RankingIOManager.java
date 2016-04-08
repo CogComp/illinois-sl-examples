@@ -17,8 +17,11 @@
  *******************************************************************************/
 package edu.illinois.cs.cogcomp.sl.applications.reranking;
 
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
+import java.util.List;
 
 import edu.illinois.cs.cogcomp.core.io.LineIO;
 import edu.illinois.cs.cogcomp.sl.core.SLProblem;
@@ -70,12 +73,37 @@ public class RankingIOManager {
 				ri.featureList.add(new SparseFeatureVector(idx_list, valueList));
 			}
 			
-			RankingLabel labeledRerankingIns = new RankingLabel(
-					bestItem);
+			RankingLabel labeledRerankingIns = new RankingLabel(ri, bestItem);
 
 			sp.addExample(ri, labeledRerankingIns);
 		}
 		return sp;
 	}
 
+	public static void writePredictions(List<RankingLabel> predictions, String fileName) throws IOException {
+		if (fileName == null)
+			throw new IOException("Null filename.");
+
+		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+		for (RankingLabel prediction: predictions) {
+			writer.write(prediction.pred_item+ "\n");
+		}
+		writer.close();
+	}
+
+	public static void writeScores(List<RankingSequence> sequences, String fileName) throws IOException {
+		if (fileName == null)
+			throw new IOException("Null filename.");
+
+		BufferedWriter writer = new BufferedWriter(new FileWriter(fileName));
+		for (RankingSequence sequence: sequences) {
+			RankingInstance rankingInstance = sequence.getRankingInstance();
+			writer.write(rankingInstance.featureList.size() + " " + rankingInstance.example_id + "\n");
+			List<Double> scores = sequence.getNormalizedScores();
+			for (int i=0; i<rankingInstance.featureList.size(); i++) {
+				writer.write(scores.get(i) + " " + rankingInstance.viewNameList.get(i) + "\n");
+			}
+		}
+		writer.close();
+	}
 }

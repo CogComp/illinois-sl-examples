@@ -21,12 +21,18 @@ import edu.illinois.cs.cogcomp.sl.core.IStructure;
 
 
 public class RankingLabel implements IStructure{
+	private RankingInstance rankingInstance;
 	public final int pred_item;
 	
-	public RankingLabel(int best_item){
+	public RankingLabel(RankingInstance rankingInstance, int best_item){
+		this.rankingInstance = rankingInstance;
 		this.pred_item = best_item;
 	}
-	
+
+	public RankingInstance getRankingInstance() {
+		return this.rankingInstance;
+	}
+
 	@Override
 	public boolean equals(Object aThat) {
 		// check for self-comparison

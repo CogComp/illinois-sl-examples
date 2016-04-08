@@ -19,7 +19,9 @@ package edu.illinois.cs.cogcomp.sl.applications.reranking;
 
 import java.io.BufferedWriter;
 import java.io.FileWriter;
+import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
 import edu.illinois.cs.cogcomp.core.utilities.commands.CommandDescription;
 import edu.illinois.cs.cogcomp.core.utilities.commands.InteractiveShell;
@@ -52,31 +54,27 @@ public class MainClass {
 			// save the model
 			model.saveModel(modelPath);
 		}
+
 		@CommandDescription(description="testRankingModel modelPath testDataPath")
 		public static void testRankingModel(String modelPath, String testDataPath) throws Exception{
 			testRankingModel(modelPath, testDataPath, null);
 		}
 
-		@CommandDescription(description="testRankingModel modelPath testDataPath prediction")
+		@CommandDescription(description="testRankingModel modelPath testDataPath predictionFileName")
 		public static void testRankingModel(String modelPath, String testDataPath, String predictionFileName)
 				throws Exception {
 			SLModel model = SLModel.loadModel(modelPath);
 			SLProblem sp = RankingIOManager.readProblem(testDataPath);
 			RankingInferenceSolver infSolver = new RankingInferenceSolver();
 
-			BufferedWriter writer = null;
-			if(predictionFileName!=null){
-				writer = new BufferedWriter(new FileWriter(predictionFileName));
-			}
-
 			double pred_loss = 0.0;
+			List<RankingLabel> predictions = new ArrayList<>();
 			try {
 				for (int i = 0; i < sp.size(); i++) {
 					RankingInstance ri = (RankingInstance) sp.instanceList.get(i);
 					RankingLabel pred = (RankingLabel) infSolver.getBestStructure(model.wv, ri);
+					predictions.add(pred);
 					pred_loss += ri.scoreList.get(pred.pred_item);
-					if(writer!=null)
-						writer.write(pred.pred_item+ "\n");
 				}
 			} catch (Exception e) {
 				e.printStackTrace();
@@ -84,8 +82,43 @@ public class MainClass {
 			}
 			System.out.println("Loss = " + pred_loss/sp.size());
 
-			if(writer!=null)
-				writer.close();
+			if(predictionFileName!=null){
+				RankingIOManager.writePredictions(predictions, predictionFileName);
+			}
+			return;
+		}
+
+		@CommandDescription(description="testRankingModel modelPath testDataPath predictionFileName scoreFileName")
+		public static void testRankingModel(String modelPath, String testDataPath, String predictionFileName, String
+				scoreFileName) throws Exception {
+			SLModel model = SLModel.loadModel(modelPath);
+			SLProblem sp = RankingIOManager.readProblem(testDataPath);
+			RankingInferenceSolver infSolver = new RankingInferenceSolver();
+
+			double pred_loss = 0.0;
+			List<RankingSequence> sequences = new ArrayList<>();
+			List<RankingLabel> predictions = new ArrayList<>();
+			try {
+				for (int i = 0; i < sp.size(); i++) {
+					RankingInstance ri = (RankingInstance) sp.instanceList.get(i);
+					RankingSequence sequence = (RankingSequence) infSolver.getStructureScores(model.wv, ri);
+					sequences.add(sequence);
+					RankingLabel pred = new RankingLabel(sequence.getRankingInstance(), sequence.getMaxScoreIndex());
+					predictions.add(pred);
+					pred_loss += ri.scoreList.get(pred.pred_item);
+				}
+			} catch (Exception e) {
+				e.printStackTrace();
+				System.exit(-1);
+			}
+			System.out.println("Loss = " + pred_loss/sp.size());
+
+			if(predictionFileName!=null){
+				RankingIOManager.writePredictions(predictions, predictionFileName);
+			}
+			if(scoreFileName!=null){
+				RankingIOManager.writeScores(sequences, scoreFileName);
+			}
 			return;
 		}
 	}
