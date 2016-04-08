@@ -22,6 +22,9 @@ import edu.illinois.cs.cogcomp.sl.core.IInstance;
 import edu.illinois.cs.cogcomp.sl.core.IStructure;
 import edu.illinois.cs.cogcomp.sl.util.WeightVector;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class RankingInferenceSolver extends AbstractInferenceSolver{
 
 	private static final long serialVersionUID = 1L;
@@ -51,32 +54,28 @@ public class RankingInferenceSolver extends AbstractInferenceSolver{
 		}
 		assert max_index != -1;
 		
-		RankingLabel pred = new RankingLabel(max_index);
+		RankingLabel pred = new RankingLabel(ri, max_index);
 		//System.out.println("pred: " + max_index + " gold: " + lri.pred_item);
 		return pred;
 	}
 
 	@Override
-	public IStructure getBestStructure(WeightVector weight, IInstance ins)
-			throws Exception {
-		RankingInstance ri = (RankingInstance) ins;
-		int maxIndex = -1;
-		double maxScore = Double.NEGATIVE_INFINITY;
+	public IStructure getBestStructure(WeightVector weight, IInstance ins) throws Exception {
+		RankingSequence sequence = (RankingSequence) this.getStructureScores(weight, ins);
+		return new RankingLabel((RankingInstance)ins, sequence.getMaxScoreIndex());
+	}
 
-		if (ri.featureList == null || ri.featureList.size() == 0) {
-			throw (new IllegalArgumentException("Empty example found: " + ri.example_id));
-		}
+	public IStructure getStructureScores(WeightVector weight, IInstance ins) throws Exception {
+		RankingInstance ri = (RankingInstance) ins;
+		List<Double> scores = new ArrayList<>();
 		for(int i=0; i < ri.featureList.size(); i ++){
 			double score = weight.dotProduct(ri.featureList.get(i));
-			if (score > maxScore){
-				maxScore = score;
-				maxIndex = i;
-			}
+			scores.add(score);
 		}
-		assert maxIndex != -1;
-		
-		return new RankingLabel(maxIndex);
+		RankingSequence sequence = new RankingSequence(ri, scores);
+		return sequence;
 	}
+
 	@Override
 	public float getLoss(IInstance ins, IStructure goldStructure,  IStructure structure){
 		RankingInstance ri = (RankingInstance) ins;
