@@ -125,9 +125,9 @@ public abstract class MainClass {
 
 	private static void pre_extract(SLModel model, SLProblem problem) {
 		// there shld be a better way, feature extraction
-		for (Pair<IInstance, IStructure> p : problem) {
-			model.featureGenerator
-					.getFeatureVector(p.getFirst(), p.getSecond());
+		for(int i=0;i<problem.size();i++)
+		{
+			model.featureGenerator.getFeatureVector(problem.instanceList.get(i),problem.goldStructureList.get(i));
 		}
 	}
 
